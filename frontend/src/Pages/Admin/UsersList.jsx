@@ -1,0 +1,118 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const UsersList = () => {
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const fetchAllUsers = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.get('http://localhost:9000/User/all');
+            
+            // Kiểm tra dữ liệu trả về từ API
+            if (response.data && Array.isArray(response.data)) {
+                // Chỉ lấy những người có role là AUTHOR
+                const authors = response.data.filter(u => u && u.role === 'AUTHOR');
+                setUsers(authors);
+            }
+            setLoading(false);
+        } catch (err) {
+            console.error("Lỗi kết nối API:", err);
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchAllUsers();
+    }, []);
+
+    const handleDeleteUser = async (id) => {
+        if (!id) return;
+        if (window.confirm("Bạn có chắc chắn muốn xóa người dùng này không?")) {
+            try {
+                await axios.delete(`http://localhost:9000/User/delete/${id}`);
+                alert("Đã xóa thành công!");
+                fetchAllUsers();
+            } catch (err) {
+                alert("Lỗi khi xóa người dùng.");
+            }
+        }
+    };
+
+    if (loading) return (
+        <div className="pt-40 text-center font-black text-gray-400 tracking-widest uppercase">
+            Loading Users...
+        </div>
+    );
+
+    return (
+        <div className="pt-32 px-10 pb-20 bg-gray-50 min-h-screen">
+            <div className="max-w-7xl mx-auto">
+                {/* Header */}
+                <div className="flex justify-between items-end mb-10">
+                    <div>
+                        <h2 className="text-4xl font-black text-black uppercase tracking-tighter">
+                            Users Management
+                        </h2>
+                        <p className="text-gray-500 font-bold uppercase text-[10px] tracking-widest mt-2 border-l-4 border-blue-600 pl-3">
+                            Author Accounts Registry
+                        </p>
+                    </div>
+                    
+                </div>
+
+                {/* Table */}
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <table className="w-full text-left border-collapse">
+                        <thead>
+                            <tr className="bg-gray-800 text-white uppercase text-[11px] tracking-widest">
+                                <th className="p-5 font-black border-r border-gray-700">Full Name</th>
+                                <th className="p-5 font-black border-r border-gray-700">User Name</th>
+                                <th className="p-5 font-black border-r border-gray-700">Email Address</th>
+                                <th className="p-5 font-black border-r border-gray-700">Phone Number</th>
+                                <th className="p-5 font-black text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100">
+                            {users.length > 0 ? (
+                                users.map((user, index) => (
+                                    <tr key={user.id || index} className="hover:bg-gray-50 transition-all">
+                                        <td className="p-5 font-bold text-gray-800 uppercase text-xs">
+                                            {user.fullName || 'No Name'}
+                                        </td>
+                                        <td className="p-5 font-black text-blue-600 text-xs">
+                                            @{user.userName || 'unknown'}
+                                        </td>
+                                        <td className="p-5 font-bold text-gray-600 text-xs italic">
+                                            {user.emailAddress || user.email || 'No Email'}
+                                        </td>
+                                        <td className="p-5 font-bold text-gray-600 text-xs">
+                                            {user.phoneNumber || 'N/A'}
+                                        </td>
+                                        <td className="p-5 text-center">
+                                            <button 
+                                                onClick={() => handleDeleteUser(user.id)}
+                                                className="bg-red-50 text-red-600 px-3 py-1 rounded font-black text-[10px] uppercase hover:bg-red-600 hover:text-white transition-all shadow-sm"
+                                            >
+                                                Delete Account
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="5" className="p-20 text-center text-gray-400 font-black uppercase tracking-widest">
+                                        No Authors Found
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default UsersList;
