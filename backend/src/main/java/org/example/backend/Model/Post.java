@@ -27,6 +27,12 @@ public class Post {
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @Column(name = "full_name")
+    private String fullName;
+
+    @Column(name = "email_address")
+    private String emailAddress;
+
     // --- GETTERS AND SETTERS (Đã cập nhật theo userName) ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -46,4 +52,10 @@ public class Post {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
+
+    public String getEmailAddress() { return emailAddress; }
+    public void setEmailAddress(String emailAddress) { this.emailAddress = emailAddress; }
 }
