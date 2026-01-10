@@ -1,7 +1,9 @@
 package org.example.backend.ServiceImplement;
 
 import org.example.backend.Model.Post;
+import org.example.backend.Model.Internote; // Thêm import Model để xử lý user
 import org.example.backend.Repository.PostRepo;
+import org.example.backend.Repository.InternoteRepo; // Thêm import Repo để tìm userName
 import org.example.backend.Service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,9 +19,11 @@ public class PostServImpl implements PostService {
     @Autowired
     private PostRepo repo;
 
+    @Autowired
+    private InternoteRepo internoteRepo; 
+
     private final String UPLOAD_DIR = System.getProperty("user.dir") + File.separator + "uploads" + File.separator;
 
-    // 1. Đổi tham số thành userName và sử dụng setUserName của Model Post
     @Override
     public Post AddPost(String title, String content, String userName, MultipartFile[] files) {
         List<String> fileNames = new ArrayList<>();
@@ -28,9 +32,15 @@ public class PostServImpl implements PostService {
         Post post = new Post();
         post.setTitle(title);
         post.setContent(content);
-        post.setUserName(userName); // Đã đổi từ setAuthorName thành setUserName
+        post.setUserName(userName);
         post.setAttachments(fileNames);
         post.setCreatedAt(LocalDateTime.now());
+
+        internoteRepo.findByUserName(userName).ifPresent(user -> {
+            post.setFullName(user.getFullName());
+            post.setEmailAddress(user.getEmailAddress());
+        });
+
         return repo.save(post);
     }
 
@@ -40,18 +50,14 @@ public class PostServImpl implements PostService {
 
         List<String> finalAttachments = new ArrayList<>();
 
-        // LOGIC BẢO VỆ DỮ LIỆU:
         if (existingFiles != null) {
-            // Nếu Frontend gửi danh sách file muốn giữ lại, ta dùng danh sách đó
             finalAttachments.addAll(Arrays.asList(existingFiles));
         } else {
-            // Nếu Frontend không gửi gì (null), ta mặc định giữ lại toàn bộ file cũ hiện có trong DB
             if (post.getAttachments() != null) {
                 finalAttachments.addAll(post.getAttachments());
             }
         }
 
-        // Lưu thêm các file mới (nếu có)
         saveFiles(files, finalAttachments);
 
         post.setTitle(title);
@@ -78,7 +84,6 @@ public class PostServImpl implements PostService {
     @Override public Post GetPostById(Long id) { return repo.findById(id).orElse(null); }
     @Override public List<Post> GetAllPosts() { return repo.findAll(); }
 
-    // 2. Đổi tên hàm và sử dụng hàm findByUserName đã tạo trong Repo
     @Override
     public List<Post> GetPostsByUserName(String userName) {
         return repo.findByUserNameOrderByCreatedAtDesc(userName);
