@@ -3,27 +3,23 @@ package org.example.backend.Model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "internote") // Đảm bảo tên bảng khớp với SQL
+@Table(name = "internote") 
 public class Internote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // SỬA: Map chính xác với cột full_name trong SQL
     @Column(name = "full_name")
     private String fullName;
 
-    // SỬA: Map chính xác với cột email_address trong SQL
     @Column(name = "email_address", unique = true)
     private String emailAddress;
 
-    // SỬA: Map chính xác với cột phone_number trong SQL
     @Column(name = "phone_number")
     private String phoneNumber;
 
     private String password;
 
-    // SỬA: Map chính xác với cột user_name (Admin sẽ để NULL cột này)
     @Column(name = "user_name")
     private String userName;
 
@@ -35,7 +31,6 @@ public class Internote {
         AUTHOR
     }
 
-    // --- GETTERS AND SETTERS (Giữ nguyên như cũ) ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -57,3 +52,4 @@ public class Internote {
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
 }
+
