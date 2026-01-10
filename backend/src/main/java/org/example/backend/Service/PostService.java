@@ -5,12 +5,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface PostService {
-    // Đổi author thành userName
     public Post AddPost(String title, String content, String userName, MultipartFile[] files);
 
     public List<Post> GetAllPosts();
 
-    // Đổi tên phương thức và tham số cho đồng bộ
     public List<Post> GetPostsByUserName(String userName);
 
     public void DeletePost(Long id);
