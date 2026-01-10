@@ -16,7 +16,6 @@ public class PostControl {
     @Autowired
     private PostService postService;
 
-    // 1. Nhận userName từ Frontend gửi lên
     @PostMapping(value = "/add-post", consumes = {"multipart/form-data"})
     public ResponseEntity<Post> addPost(
             @RequestParam("title") String title,
@@ -57,7 +56,6 @@ public class PostControl {
         return ResponseEntity.ok(postService.GetPostById(id));
     }
 
-    // BỔ SUNG: Alias ngắn gọn cho Dashboard Admin
     @GetMapping("/all")
     public List<Post> getAllPostsAdmin() {
         return postService.GetAllPosts();
@@ -68,13 +66,11 @@ public class PostControl {
         return postService.GetAllPosts();
     }
 
-    // BỔ SUNG: Endpoint mới sử dụng đúng thuật ngữ user cho đồng bộ
     @GetMapping("/user/{userName}")
     public List<Post> getPostsByUserNameSync(@PathVariable String userName) {
         return postService.GetPostsByUserName(userName);
     }
 
-    // 2. Tìm bài viết dựa trên userName (Giữ nguyên path cũ để tránh lỗi Route Frontend)
     @GetMapping("/author/{userName}")
     public List<Post> getPostsByUserName(@PathVariable String userName) {
         return postService.GetPostsByUserName(userName);
@@ -86,3 +82,4 @@ public class PostControl {
         return ResponseEntity.ok("Deleted successfully");
     }
 }
+
