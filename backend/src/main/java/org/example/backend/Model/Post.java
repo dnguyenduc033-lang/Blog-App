@@ -16,7 +16,6 @@ public class Post {
     @Column(columnDefinition = "LONGTEXT")
     private String content;
 
-    // Đổi tên cột từ author_name thành user_name để đồng bộ
     @Column(name = "user_name")
     private String userName;
 
@@ -33,7 +32,6 @@ public class Post {
     @Column(name = "email_address")
     private String emailAddress;
 
-    // --- GETTERS AND SETTERS (Đã cập nhật theo userName) ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -43,7 +41,6 @@ public class Post {
     public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }
 
-    // Getter và Setter mới cho userName
     public String getUserName() { return userName; }
     public void setUserName(String userName) { this.userName = userName; }
 
@@ -59,3 +56,4 @@ public class Post {
     public String getEmailAddress() { return emailAddress; }
     public void setEmailAddress(String emailAddress) { this.emailAddress = emailAddress; }
 }
+
