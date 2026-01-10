@@ -19,7 +19,7 @@ public class InternoteControl {
     @Autowired
     private InternoteServImpl internoteServ;
 
-    // 1. ĐĂNG KÝ AUTHOR
+    // 1. ĐĂNG KÝ AUTHOR (Giữ nguyên)
     @PostMapping("/signup-author")
     public ResponseEntity<Internote> signUpAuthor(@RequestBody Internote internote) {
         internote.setRole(Internote.Role.AUTHOR);
@@ -27,7 +27,7 @@ public class InternoteControl {
         return ResponseEntity.ok(savedUser);
     }
 
-    // 2. ĐĂNG NHẬP AUTHOR - Sử dụng ResponseEntity<?> để hết lỗi dòng 44
+    // 2. ĐĂNG NHẬP AUTHOR (Giữ nguyên)
     @PostMapping("/signin-author")
     public ResponseEntity<?> signInAuthor(@RequestBody Map<String, String> data) {
         String username = data.get("username");
@@ -44,14 +44,12 @@ public class InternoteControl {
                 }
             }
         }
-        // Dòng 44: Trả về String báo lỗi
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Author login failed");
     }
 
-    // 3. ĐĂNG NHẬP ADMIN - Sử dụng ResponseEntity<?> để hết lỗi dòng 64
+    // 3. ĐĂNG NHẬP ADMIN (Giữ nguyên)
     @PostMapping("/signin-admin")
     public ResponseEntity<?> signInAdmin(@RequestBody Map<String, String> data) {
-        // Lấy dữ liệu từ Frontend gửi lên
         String fullName = data.get("fullName");
         String email = data.get("email");
         String phone = data.get("phone");
@@ -59,10 +57,7 @@ public class InternoteControl {
 
         List<Internote> all = internoteServ.GetAllInternote();
         for (Internote user : all) {
-            // Kiểm tra Role ADMIN (Khớp với chữ ADMIN trong hình SQL bạn gửi)
             if (user.getRole() == Internote.Role.ADMIN) {
-
-                // So khớp từng trường với dữ liệu thực tế trong bảng SQL
                 boolean isNameMatch = user.getFullName() != null && user.getFullName().equalsIgnoreCase(fullName);
                 boolean isEmailMatch = Objects.equals(user.getEmailAddress(), email);
                 boolean isPhoneMatch = Objects.equals(user.getPhoneNumber(), phone);
@@ -73,11 +68,17 @@ public class InternoteControl {
                 }
             }
         }
-        // Dòng 64: Trả về String báo lỗi
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Admin login failed");
     }
 
-    // 4. CÁC HÀM QUẢN LÝ (CRUD)
+    // 4. CÁC HÀM QUẢN LÝ (Bổ sung để hỗ trợ Dashboard/UsersList)
+
+    // BỔ SUNG: Alias cho trang UsersList của Admin dễ gọi
+    @GetMapping("/all")
+    public List<Internote> getAllUsers() {
+        return internoteServ.GetAllInternote();
+    }
+
     @GetMapping("/GetAllInternote")
     public List<Internote> getAllInternote() {
         return internoteServ.GetAllInternote();
@@ -94,6 +95,17 @@ public class InternoteControl {
             existing.setPassword(internote.getPassword());
             existing.setRole(internote.getRole());
             return ResponseEntity.ok(internoteServ.UpdateInternote(existing));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    // BỔ SUNG: Alias delete ngắn gọn khớp với cách gọi thông thường của Frontend
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        Internote exist = internoteServ.GetInternoteById(id);
+        if (exist != null) {
+            internoteServ.DeleteInternote(exist);
+            return ResponseEntity.ok("User deleted successfully");
         }
         return ResponseEntity.notFound().build();
     }
