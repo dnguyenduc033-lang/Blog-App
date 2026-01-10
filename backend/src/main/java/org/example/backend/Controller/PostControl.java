@@ -21,10 +21,9 @@ public class PostControl {
     public ResponseEntity<Post> addPost(
             @RequestParam("title") String title,
             @RequestParam("content") String content,
-            @RequestParam("userName") String userName, // Đã đổi từ author thành userName
+            @RequestParam("userName") String userName,
             @RequestParam(value = "files", required = false) MultipartFile[] files) {
 
-        // Gọi Service xử lý với tham số userName
         return ResponseEntity.ok(postService.AddPost(title, content, userName, files));
     }
 
@@ -39,7 +38,6 @@ public class PostControl {
         try {
             String[] existingFiles = null;
 
-            // Sửa 2: Kiểm tra an toàn trước khi split chuỗi JSON
             if (existingFilesJson != null && !existingFilesJson.isEmpty() && !existingFilesJson.equals("null")) {
                 String cleanJson = existingFilesJson.replace("[", "").replace("]", "").replace("\"", "");
                 if (!cleanJson.isEmpty()) {
@@ -47,11 +45,9 @@ public class PostControl {
                 }
             }
 
-            // Giữ nguyên logic gọi Service của bạn
             Post result = postService.UpdatePost(id, title, content, files, existingFiles);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
-            // Trả về thông báo lỗi cụ thể để bạn dễ debug
             return ResponseEntity.internalServerError().body("Lỗi cập nhật: " + e.getMessage());
         }
     }
@@ -61,15 +57,27 @@ public class PostControl {
         return ResponseEntity.ok(postService.GetPostById(id));
     }
 
+    // BỔ SUNG: Alias ngắn gọn cho Dashboard Admin
+    @GetMapping("/all")
+    public List<Post> getAllPostsAdmin() {
+        return postService.GetAllPosts();
+    }
+
     @GetMapping("/GetAllPosts")
     public List<Post> getAllPosts() {
         return postService.GetAllPosts();
     }
 
-    // 2. Tìm bài viết dựa trên userName
-    @GetMapping("/author/{userName}") // Giữ nguyên path /author/ để không phải sửa Route Frontend quá nhiều
+    // BỔ SUNG: Endpoint mới sử dụng đúng thuật ngữ user cho đồng bộ
+    @GetMapping("/user/{userName}")
+    public List<Post> getPostsByUserNameSync(@PathVariable String userName) {
+        return postService.GetPostsByUserName(userName);
+    }
+
+    // 2. Tìm bài viết dựa trên userName (Giữ nguyên path cũ để tránh lỗi Route Frontend)
+    @GetMapping("/author/{userName}")
     public List<Post> getPostsByUserName(@PathVariable String userName) {
-        return postService.GetPostsByUserName(userName); // Đổi tên hàm cho khớp
+        return postService.GetPostsByUserName(userName);
     }
 
     @DeleteMapping("/delete/{id}")
