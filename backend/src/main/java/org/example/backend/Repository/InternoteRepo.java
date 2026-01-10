@@ -8,9 +8,9 @@ import java.util.Optional;
 @Repository
 public interface InternoteRepo extends JpaRepository<Internote, Long> {
 
-    // Tìm người dùng bằng Email
     Optional<Internote> findByEmailAddress(String email);
+    Optional<Internote> findByUserName(String userName);
 
-    // Kiểm tra xem email đã tồn tại trong DB chưa (dùng cho Sign Up)
     boolean existsByEmailAddress(String email);
 }
+
