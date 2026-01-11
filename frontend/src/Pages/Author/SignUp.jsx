@@ -7,7 +7,6 @@ const SignUp = () => {
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const navigate = useNavigate();
 
-  // State quản lý toàn bộ 5 trường dữ liệu + confirmPassword
   const [formData, setFormData] = useState({
     fullName: '',
     phoneNumber: '',
@@ -27,14 +26,12 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Kiểm tra mật khẩu khớp nhau trước khi gửi
     if (formData.password !== formData.confirmPassword) {
       alert("Mật khẩu xác nhận không khớp!");
       return;
     }
 
     try {
-      // Gửi 5 trường chính sang Backend (không gửi confirmPassword)
       const response = await axios.post('http://localhost:9000/Internote/signup-author', {
         fullName: formData.fullName,
         phoneNumber: formData.phoneNumber,
@@ -44,12 +41,12 @@ const SignUp = () => {
       });
 
       if (response.status === 200) {
-        alert("Đăng ký Author thành công!");
-        navigate('/SignIn'); // Chuyển sang trang đăng nhập sau khi thành công
+        alert("Account registration successful!");
+        navigate('/SignIn'); 
       }
     } catch (error) {
-      console.error("Lỗi đăng ký:", error);
-      alert("Đăng ký thất bại. Vui lòng thử lại!");
+      console.error("Registration failed:", error);
+      alert("Registration failed. Please try again!");
     }
   };
 
@@ -58,7 +55,6 @@ const SignUp = () => {
       <form onSubmit={handleSubmit} className="max-w-md w-full mx-auto p-6 bg-white shadow-md rounded-lg">
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Create an account</h2>
 
-        {/* 1. Full Name */}
         <div className="relative z-0 w-full mb-5 group">
           <input 
             type="text" 
@@ -74,7 +70,6 @@ const SignUp = () => {
           </label>
         </div>
 
-        {/* 2. Phone Number */}
         <div className="relative z-0 w-full mb-5 group">
           <input 
             type="tel" 
@@ -90,7 +85,6 @@ const SignUp = () => {
           </label>
         </div>
 
-        {/* 3. User name */}
         <div className="relative z-0 w-full mb-5 group">
           <input 
             type="text" 
@@ -106,7 +100,6 @@ const SignUp = () => {
           </label>
         </div>
 
-        {/* 4. Email address */}
         <div className="relative z-0 w-full mb-5 group">
           <input 
             type="email" 
@@ -122,7 +115,6 @@ const SignUp = () => {
           </label>
         </div>
 
-        {/* 5. Password */}
         <div className="relative z-0 w-full mb-5 group">
           <input 
             type={showPassword ? "text" : "password"} 
@@ -149,7 +141,6 @@ const SignUp = () => {
           </button>
         </div>
 
-        {/* 6. Confirm password */}
         <div className="relative z-0 w-full mb-8 group">
           <input 
             type={showRepeatPassword ? "text" : "password"} 
