@@ -42,7 +42,6 @@ const Profile = () => {
         <div className="min-h-screen bg-gray-50 pt-28 pb-12 px-4">
             <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-md p-10 border border-gray-100">
                 
-                {/* PHẦN ĐẦU: AVATAR BÊN TRÁI TIÊU ĐỀ */}
                 <div className="flex items-center space-x-6 mb-12 pb-8 border-b-2 border-gray-50">
                     <div className="w-20 h-20 bg-blue-600 rounded-full flex-shrink-0 flex items-center justify-center text-white text-3xl font-black shadow-lg ring-4 ring-blue-50">
                         {(userData?.userName || "U").charAt(0).toUpperCase()}
@@ -57,13 +56,11 @@ const Profile = () => {
 
                 <div className="space-y-6">
                     <div className="grid grid-cols-1 gap-5">
-                        {/* 1. Full Name */}
                         <div className="border-b border-gray-100 pb-3">
                             <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1">Full Name</label>
                             <p className="text-lg font-bold text-gray-800">{userData?.fullName || 'Not provided'}</p>
                         </div>
 
-                        {/* 2. Username (Chỉ hiện cho Author) */}
                         {userData?.role === 'AUTHOR' && (
                             <div className="border-b border-gray-100 pb-3">
                                 <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1">Username</label>
@@ -71,19 +68,16 @@ const Profile = () => {
                             </div>
                         )}
 
-                        {/* 3. Email Address */}
                         <div className="border-b border-gray-100 pb-3">
                             <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1">Email Address</label>
                             <p className="text-lg font-bold text-gray-800">{displayEmail}</p>
                         </div>
 
-                        {/* 4. Phone Number */}
                         <div className="border-b border-gray-100 pb-3">
                             <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1">Phone Number</label>
                             <p className="text-lg font-bold text-gray-800">{userData?.phoneNumber || 'Not provided'}</p>
                         </div>
 
-                        {/* 5. Password */}
                         <div className="border-b border-gray-100 pb-3">
                             <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1">Password</label>
                             <div className="flex justify-between items-center">
@@ -93,7 +87,6 @@ const Profile = () => {
                         </div>
                     </div>
 
-                    {/* Nút bấm */}
                     <div className="pt-10 flex flex-col gap-4">
                         <button 
                             onClick={() => navigate('/EditProfile')}
