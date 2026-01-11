@@ -19,13 +19,13 @@ const SignIn = ({ setUser }) => {
     try {
       const response = await axios.post("http://localhost:9000/Internote/signin-author", formData);
       if (response.data.role === "AUTHOR") {
-        alert("Chào Author: " + response.data.userName);
+        alert("Hi" + response.data.userName);
         sessionStorage.setItem('user', JSON.stringify(response.data));
         setUser(response.data);
         window.location.href = "/";
       }
     } catch (error) {
-      alert("Thông tin Author không chính xác!");
+      alert("User information is inaccurate.!");
     }
   };
 
@@ -34,19 +34,16 @@ const SignIn = ({ setUser }) => {
       <form onSubmit={handleSignIn} className="max-w-md w-full mx-auto p-6 bg-white shadow-md rounded-lg border border-gray-100">
         <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">Sign in as Author</h2>
 
-        {/* Username */}
         <div className="relative z-0 w-full mb-6 group">
           <input type="text" name="username" onChange={handleChange} className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
           <label className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Username</label>
         </div>
 
-        {/* Email Address */}
         <div className="relative z-0 w-full mb-6 group">
           <input type="email" name="emailAddress" onChange={handleChange} className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
           <label className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Email address</label>
         </div>
 
-        {/* Password */}
         <div className="relative z-0 w-full mb-8 group">
           <input type={showPassword ? "text" : "password"} name="password" onChange={handleChange} className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer pr-10" placeholder=" " required />
           <label className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Password</label>
