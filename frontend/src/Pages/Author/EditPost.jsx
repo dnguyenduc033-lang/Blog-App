@@ -15,7 +15,6 @@ const EditPost = () => {
     const [isUpdating, setIsUpdating] = useState(false);
 
     useEffect(() => {
-        // Lấy dữ liệu bài viết cũ
         axios.get(`http://localhost:9000/Post/${id}`)
             .then(res => {
                 setTitle(res.data.title);
@@ -63,10 +62,8 @@ const EditPost = () => {
         formData.append('title', title);
         formData.append('content', content);
         
-        // Gửi danh sách tên các file cũ muốn giữ lại
         formData.append('existingFiles', JSON.stringify(existingFiles));
         
-        // Gửi các file mới được chọn
         selectedFiles.forEach(file => {
             formData.append('files', file);
         });
@@ -123,7 +120,6 @@ const EditPost = () => {
                             </div>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                {/* Hiển thị File cũ hiện có trên Server */}
                                 {existingFiles.map((fileName, index) => (
                                     <div key={`old-${index}`} className="flex items-center justify-between p-3 bg-blue-50 border border-blue-100 rounded-lg shadow-sm">
                                         <div className="flex items-center gap-3 overflow-hidden">
@@ -140,7 +136,6 @@ const EditPost = () => {
                                     </div>
                                 ))}
 
-                                {/* Hiển thị File mới vừa chọn (Previews) */}
                                 {previews.map((file, index) => (
                                     <div key={`new-${index}`} className="flex items-center justify-between p-3 bg-white border rounded-lg shadow-sm">
                                         <div className="flex items-center gap-3 overflow-hidden">
