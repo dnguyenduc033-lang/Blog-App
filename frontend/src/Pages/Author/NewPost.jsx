@@ -11,7 +11,6 @@ const NewPost = () => {
     const fileInputRef = useRef(null);
     const navigate = useNavigate();
 
-    // 1. Lấy đúng userName (viết hoa N) từ sessionStorage để khớp với SignIn
     const storedUser = sessionStorage.getItem('user');
     const currentUser = storedUser ? JSON.parse(storedUser) : null;
     const userName = currentUser?.userName || 'Anonymous'; 
@@ -49,8 +48,6 @@ const NewPost = () => {
         const formData = new FormData();
         formData.append('title', title);
         formData.append('content', content);
-        
-        // 2. QUAN TRỌNG: Đổi tên key từ 'author' thành 'userName' để khớp với Backend
         formData.append('userName', userName); 
         
         selectedFiles.forEach(file => {
