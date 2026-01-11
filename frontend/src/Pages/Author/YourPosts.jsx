@@ -6,12 +6,10 @@ const YourPosts = () => {
     const [posts, setPosts] = useState([]);
     const navigate = useNavigate();
     
-    // 1. Lấy userName từ sessionStorage
     const storedUser = sessionStorage.getItem('user');
     const currentUser = storedUser ? JSON.parse(storedUser) : null;
     const userName = currentUser?.userName;
 
-    // Hàm gọi API lấy danh sách bài viết (đưa ra ngoài để tái sử dụng sau khi xóa)
     const fetchPosts = () => {
         if (userName) {
             axios.get(`http://localhost:9000/Post/author/${userName}`)
@@ -24,7 +22,6 @@ const YourPosts = () => {
         fetchPosts();
     }, [userName]);
 
-    // 2. Xử lý xóa bài viết
     const handleDelete = async (postId) => {
         if (window.confirm("Are you sure you want to delete this post?")) {
             try {
@@ -38,7 +35,6 @@ const YourPosts = () => {
         }
     };
 
-    // 3. Xử lý chỉnh sửa bài viết
     const handleEdit = (postId) => {
         // Chuyển hướng sang trang Edit với ID bài viết
         navigate(`/EditPost/${postId}`);
@@ -63,7 +59,6 @@ const YourPosts = () => {
                                 <p className="text-gray-500 line-clamp-2">{post.content}</p>
                             </div>
 
-                            {/* Nút bấm hành động */}
                             <div className="flex gap-2">
                                 {/* Nút Edit */}
                                 <button 
@@ -74,8 +69,6 @@ const YourPosts = () => {
                                         <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                     </svg>
                                 </button>
-
-                                {/* Nút Delete */}
                                 <button 
                                     onClick={() => handleDelete(post.id)}
                                     className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
