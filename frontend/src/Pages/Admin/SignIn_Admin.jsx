@@ -4,7 +4,6 @@ import axios from 'axios';
 const SignIn_Admin = ({ setUser }) => {
   const [showPassword, setShowPassword] = useState(false);
   
-  // ADMIN: Không có trường username. Chỉ fullName, email, phone và password.
   const [formData, setFormData] = useState({
     fullName: '',    
     email: '',       
@@ -31,8 +30,8 @@ const SignIn_Admin = ({ setUser }) => {
         window.location.href = "/";
       }
     } catch (error) {
-      console.error("Lỗi đăng nhập Admin:", error.response?.data);
-      alert("Thông tin Admin không chính xác!");
+      console.error("Admin login error:", error.response?.data);
+      alert("Admin information is incorrect!");
     }
   };
 
@@ -41,7 +40,6 @@ const SignIn_Admin = ({ setUser }) => {
       <form onSubmit={handleSignIn} className="max-w-md w-full mx-auto p-6 bg-white shadow-md rounded-lg border border-gray-100">
         <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">Sign in as Admin</h2>
 
-        {/* Full Name */}
         <div className="relative z-0 w-full mb-6 group">
           <input 
             type="text" 
@@ -56,7 +54,6 @@ const SignIn_Admin = ({ setUser }) => {
           </label>
         </div>
 
-        {/* Email Address */}
         <div className="relative z-0 w-full mb-6 group">
           <input 
             type="email" 
@@ -71,7 +68,6 @@ const SignIn_Admin = ({ setUser }) => {
           </label>
         </div>
 
-        {/* Phone Number */}
         <div className="relative z-0 w-full mb-6 group">
           <input 
             type="tel" 
@@ -86,7 +82,6 @@ const SignIn_Admin = ({ setUser }) => {
           </label>
         </div>
 
-        {/* Password with Show/Hide Eye Icon */}
         <div className="relative z-0 w-full mb-8 group">
           <input 
             type={showPassword ? "text" : "password"} 
