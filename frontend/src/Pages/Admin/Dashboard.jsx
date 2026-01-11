@@ -5,10 +5,8 @@ const Dashboard = () => {
     const [allPosts, setAllPosts] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Hàm lấy toàn bộ bài đăng từ hệ thống
     const fetchAllPosts = async () => {
         try {
-            // API lấy tất cả bài viết dành cho Admin
             const response = await axios.get('http://localhost:9000/Post/all');
             setAllPosts(response.data);
             setLoading(false);
@@ -22,7 +20,6 @@ const Dashboard = () => {
         fetchAllPosts();
     }, []);
 
-    // Hàm xóa bài đăng
     const handleDeletePost = async (postId) => {
         if (window.confirm("Are you sure you want to delete this post?")) {
             try {
