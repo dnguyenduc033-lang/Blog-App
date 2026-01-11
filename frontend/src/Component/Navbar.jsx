@@ -4,13 +4,10 @@ import { Link, useNavigate } from 'react-router-dom';
 const Navbar = ({ user, setUser }) => {
   const navigate = useNavigate();
 
-  // Hàm xử lý đăng xuất với chế độ an toàn
   const handleLogout = () => {
-    // Hiển thị thông báo xác nhận Yes/No
     const confirmLogout = window.confirm("Do you want to log out?");
     
     if (confirmLogout) {
-      // Nếu chọn Yes (OK)
       sessionStorage.removeItem('user');
       setUser(null);
       navigate('/');
@@ -49,7 +46,6 @@ const Navbar = ({ user, setUser }) => {
             ) : (
               <div className="flex items-center space-x-4 mb-2">
                 
-                {/* 3 MỤC CHO ADMIN ĐÃ CHUYỂN THÀNH CHỮ ĐEN (Bỏ thẻ button) */}
                 {user.role === 'ADMIN' && (
                   <div className="flex space-x-6 text-lg">
                     <Link to="/dashboard" className="text-black font-bold hover:text-blue-800 transition-colors">
@@ -62,7 +58,6 @@ const Navbar = ({ user, setUser }) => {
                   </div>
                 )}
 
-                {/* HIỂN THỊ CHO AUTHOR (MỚI THÊM) */}
                 {user.role === 'AUTHOR' && (
                   <div className="flex space-x-6 text-lg">
                     <Link to="/NewPost" className="text-black font-bold hover:text-blue-800 transition-colors">
