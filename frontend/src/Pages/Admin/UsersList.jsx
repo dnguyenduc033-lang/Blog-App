@@ -10,7 +10,6 @@ const UsersList = () => {
             setLoading(true);
             const response = await axios.get('http://localhost:9000/Internote/all');
             
-            // Kiểm tra dữ liệu trả về từ API
             if (response.data && Array.isArray(response.data)) {
                 // Chỉ lấy những người có role là AUTHOR
                 const authors = response.data.filter(u => u && u.role === 'AUTHOR');
@@ -29,13 +28,13 @@ const UsersList = () => {
 
     const handleDeleteUser = async (id) => {
         if (!id) return;
-        if (window.confirm("Bạn có chắc chắn muốn xóa người dùng này không?")) {
+        if (window.confirm("Are you sure you want to delete this user?")) {
             try {
                 await axios.delete(`http://localhost:9000/Internote/delete/${id}`);
-                alert("Đã xóa thành công!");
+                alert("Deleted successfully!");
                 fetchAllUsers();
             } catch (err) {
-                alert("Lỗi khi xóa người dùng.");
+                alert("Error when deleting a user.");
             }
         }
     };
@@ -49,7 +48,6 @@ const UsersList = () => {
     return (
         <div className="pt-32 px-10 pb-20 bg-gray-50 min-h-screen">
             <div className="max-w-7xl mx-auto">
-                {/* Header */}
                 <div className="flex justify-between items-end mb-10">
                     <div>
                         <h2 className="text-4xl font-black text-black uppercase tracking-tighter">
@@ -62,7 +60,6 @@ const UsersList = () => {
                     
                 </div>
 
-                {/* Table */}
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                     <table className="w-full text-left border-collapse">
                         <thead>
@@ -96,7 +93,6 @@ const UsersList = () => {
                                                 className="text-red-600 hover:bg-red-50 p-2 rounded-lg transition-all"
                                                 title="Delete Account"
                                             >
-                                                {/* Icon thùng rác giống hệt Dashboard */}
                                                 <svg 
                                                     xmlns="http://www.w3.org/2000/svg" 
                                                     fill="none" 
