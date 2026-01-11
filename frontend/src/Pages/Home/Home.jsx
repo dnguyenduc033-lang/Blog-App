@@ -4,14 +4,12 @@ const Home = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleGetStarted = () => {
-    // CHỈNH SỬA: Kiểm tra trong sessionStorage theo đúng file SignIn_Admin bạn gửi
     const loggedInUser = sessionStorage.getItem('user');
 
     if (!loggedInUser) {
       setErrorMessage("You must log in to your account first.");
       setTimeout(() => setErrorMessage(""), 3000);
     } else {
-      // Nếu đã đăng nhập, có thể chuyển hướng đến trang chính
       window.location.href = "/Home"; 
     }
   };
@@ -26,7 +24,6 @@ const Home = () => {
         </p>
         
         <div className="mt-10 flex flex-col items-center gap-4">
-          {/* Thông báo lỗi hiện ra ở đây */}
           {errorMessage && (
             <div className="bg-red-50 border-l-4 border-red-600 px-4 py-2 shadow-sm animate-bounce">
                <p className="text-red-600 font-bold text-sm uppercase tracking-tighter">
@@ -49,3 +46,4 @@ const Home = () => {
 }
 
 export default Home
+
