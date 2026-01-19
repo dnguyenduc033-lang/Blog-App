@@ -120,6 +120,7 @@ const EditPost = () => {
                             </div>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                {/* Hiển thị File cũ hiện có trên Server */}
                                 {existingFiles.map((fileName, index) => (
                                     <div key={`old-${index}`} className="flex items-center justify-between p-3 bg-blue-50 border border-blue-100 rounded-lg shadow-sm">
                                         <div className="flex items-center gap-3 overflow-hidden">
