@@ -3,7 +3,7 @@ package org.example.backend.Model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "internote") 
+@Table(name = "internote") // Đảm bảo tên bảng khớp với SQL
 public class Internote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,4 +52,3 @@ public class Internote {
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
 }
-
