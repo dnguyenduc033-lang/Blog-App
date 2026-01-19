@@ -68,6 +68,36 @@ public class InternoteControl {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Admin login failed");
     }
 
+    @GetMapping("/{identifier}")
+    public ResponseEntity<?> getUserProfile(@PathVariable String identifier) {
+        List<Internote> all = internoteServ.GetAllInternote();
+        for (Internote user : all) {
+            if (Objects.equals(user.getUserName(), identifier) ||
+                    Objects.equals(user.getEmailAddress(), identifier)) {
+                return ResponseEntity.ok(user);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+    }
+
+    @PutMapping("/update-profile/{id}")
+    public ResponseEntity<Internote> updateProfile(@RequestBody Internote internote, @PathVariable Long id) {
+        Internote existing = internoteServ.GetInternoteById(id);
+        if (existing != null) {
+            existing.setFullName(internote.getFullName());
+            existing.setPhoneNumber(internote.getPhoneNumber());
+            existing.setUserName(internote.getUserName());
+            existing.setEmailAddress(internote.getEmailAddress());
+
+            if (internote.getPassword() != null && !internote.getPassword().trim().isEmpty()) {
+                existing.setPassword(internote.getPassword());
+            }
+
+            return ResponseEntity.ok(internoteServ.UpdateInternote(existing));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @GetMapping("/all")
     public List<Internote> getAllUsers() {
         return internoteServ.GetAllInternote();
@@ -93,19 +123,9 @@ public class InternoteControl {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+    @DeleteMapping({"/delete/{id}", "/DeleteInternote/{id}"})
+    public ResponseEntity<?> deleteInternote(@PathVariable Long id) {
         Internote exist = internoteServ.GetInternoteById(id);
-        if (exist != null) {
-            internoteServ.DeleteInternote(exist);
-            return ResponseEntity.ok("User deleted successfully");
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @DeleteMapping("/DeleteInternote/{Id}")
-    public ResponseEntity<?> deleteInternote(@PathVariable Long Id) {
-        Internote exist = internoteServ.GetInternoteById(Id);
         if (exist != null) {
             internoteServ.DeleteInternote(exist);
             return ResponseEntity.ok("Deleted successfully");
@@ -113,4 +133,3 @@ public class InternoteControl {
         return ResponseEntity.notFound().build();
     }
 }
-
