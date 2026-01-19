@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-// Sử dụng đúng đường dẫn import bạn đã cung cấp để tránh lỗi
 import Navbar from './Component/Navbar'; 
 import Home from './Pages/Home/Home';
 import SignIn_Admin from './Pages/Admin/SignIn_Admin';
@@ -11,14 +10,15 @@ import NewPost from './Pages/Author/NewPost';
 import YourPosts from './Pages/Author/YourPosts';
 import EditPost from './Pages/Author/EditPost';
 import Profile from './Pages/Author/Profile';
+import EditProfile from './Pages/Author/EditProfile';
 import Dashboard from './Pages/Admin/Dashboard';
 import UsersList from './Pages/Admin/UsersList';
+import Posts from './Component/displayPost/Posts';
 
 function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Kiểm tra trạng thái đăng nhập khi load trang
     const storedUser = sessionStorage.getItem('user');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
@@ -47,9 +47,13 @@ function App() {
 
         <Route path="/Profile" element={<Profile />} />
 
+        <Route path="/EditProfile" element={<EditProfile />} />
+
         <Route path="/Dashboard" element={<Dashboard />} />
 
         <Route path="/UsersList" element={<UsersList />} />
+
+        <Route path="/Posts" element={<Posts />} />
       </Routes>
     </Router>
   );
