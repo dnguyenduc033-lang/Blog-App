@@ -7,6 +7,5 @@ import java.util.List;
 
 @Repository
 public interface CommentRepo extends JpaRepository<Comment, Integer> {
-    // Lấy danh sách bình luận theo ID bài viết, bài mới nhất lên đầu
     List<Comment> findByPostIdOrderByCreatedAtDesc(int postId);
 }
