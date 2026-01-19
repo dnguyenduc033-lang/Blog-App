@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface PostService {
-    public Post AddPost(String title, String content, String userName, MultipartFile[] files);
+    public Post AddPost(String title, String content, String userName, String category,MultipartFile[] files);
 
     public List<Post> GetAllPosts();
 
