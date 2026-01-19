@@ -15,13 +15,11 @@ public class CommentControl {
     @Autowired
     private CommentRepo commentRepo;
 
-    // POST: http://localhost:9000/Internote/posts/comment
     @PostMapping("/comment")
     public Comment saveComment(@RequestBody Comment comment) {
         return commentRepo.save(comment);
     }
 
-    // GET: http://localhost:9000/Internote/posts/{postId}/comments
     @GetMapping("/{postId}/comments")
     public List<Comment> getComments(@PathVariable int postId) {
         return commentRepo.findByPostIdOrderByCreatedAtDesc(postId);
@@ -31,4 +29,5 @@ public class CommentControl {
     public void deleteComment(@PathVariable("id") int id) {
         commentRepo.deleteById(id);
     }
+
 }
