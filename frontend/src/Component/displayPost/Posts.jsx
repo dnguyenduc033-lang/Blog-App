@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Comment from './Comment'; 
 
 const Posts = () => {
     const [posts, setPosts] = useState([]);
@@ -7,6 +8,10 @@ const Posts = () => {
     const [filteredPosts, setFilteredPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [hasInteracted, setHasInteracted] = useState(false);
+    const [selectedPost, setSelectedPost] = useState(null); 
+    const [commentsList, setCommentsList] = useState([]);
+
+    const currentUser = JSON.parse(sessionStorage.getItem('user'));
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -32,15 +37,25 @@ const Posts = () => {
         setFilteredPosts(results);
     };
 
-    // --- SỬA LẠI HÀM NÀY ĐỂ LỌC ĐÚNG ---
     const handleCategoryClick = (categoryName) => {
         setHasInteracted(true);
         if (categoryName === "ALL") {
             setFilteredPosts(posts);
         } else {
-            // Lọc theo trường category từ backend
             const results = posts.filter(post => post.category === categoryName);
             setFilteredPosts(results);
+        }
+    };
+
+    const openCommentModal = async (post) => {
+        setSelectedPost(post);
+        try {
+            // Endpoint theo chuẩn Backend đã thống nhất
+            const res = await axios.get(`http://localhost:9000/Internote/posts/${post.id}/comments`);
+            setCommentsList(res.data);
+        } catch (err) {
+            console.error("Không lấy được comment:", err);
+            setCommentsList([]); // Trả về mảng rỗng nếu chưa có bình luận
         }
     };
 
@@ -80,7 +95,6 @@ const Posts = () => {
                     </form>
                 </div>
 
-                {/* --- 2. CÁC NÚT DANH MỤC (ĐÃ ĐỔI TECHNOLOGIES -> TECHNOLOGY) --- */}
                 <div className="flex flex-wrap justify-center items-center categories gap-3 mb-16"> 
                     {["ALL", "TECHNOLOGY", "EDUCATION", "CUISINE", "ENTERTAINMENT", "JOB", "TRAVEL"].map((cat) => (
                         <button
@@ -94,23 +108,34 @@ const Posts = () => {
                     ))}
                 </div>
 
-                {/* --- 3. DANH SÁCH BÀI VIẾT --- */}
                 {hasInteracted && (
                     <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {filteredPosts.length > 0 ? (
                             filteredPosts.map((post) => (
-                                <div key={post.id} className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 flex flex-col justify-between min-h-[200px]">
+                                <div key={post.id} className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 flex flex-col justify-between min-h-[250px]">
                                     <div>
                                         <h3 className="text-2xl font-bold text-gray-900 mb-3 line-clamp-2">{post.title}</h3>
                                         <p className="text-gray-600 text-sm mb-6 line-clamp-3">{post.content}</p>
                                     </div>
-                                    <div className="border-t pt-4 flex justify-between items-center">
-                                        <span className="text-blue-600 font-bold text-xs uppercase tracking-widest">
-                                            @{post.userName || 'author'}
-                                        </span>
-                                        <span className="text-gray-400 text-[11px] font-medium">
-                                            {post.createdAt ? new Date(post.createdAt).toLocaleDateString('vi-VN') : "No date"}
-                                        </span>
+                                    <div className="border-t pt-4">
+                                        <div className="flex justify-between items-center mb-4">
+                                            <span className="text-blue-600 font-bold text-xs uppercase tracking-widest">
+                                                @{post.userName || 'author'}
+                                            </span>
+                                            <span className="text-gray-400 text-[11px] font-medium">
+                                                {post.createdAt ? new Date(post.createdAt).toLocaleDateString('vi-VN') : "No date"}
+                                            </span>
+                                        </div>
+
+                                        <button 
+                                            onClick={() => openCommentModal(post)}
+                                            className="w-full py-2.5 flex items-center justify-center gap-2 bg-green-500 hover:bg-green-700 text-white text-xs font-bold uppercase rounded-lg transition-all active:scale-95 shadow-sm"
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3h9m-9 3h3m-12 1.5l.623-1.66A10.5 10.5 0 1012 4.5c-4.47 0-8.257 2.803-9.727 6.75L2.25 16.5l3.5-.75z" />
+                                            </svg>
+                                            Comment
+                                        </button>
                                     </div>
                                 </div>
                             ))
@@ -122,6 +147,16 @@ const Posts = () => {
                     </div>
                 )}
             </div>
+
+            {selectedPost && (
+                <Comment 
+                    post={selectedPost} 
+                    onClose={() => setSelectedPost(null)} 
+                    comments={commentsList}
+                    setComments={setCommentsList}
+                    currentUser={currentUser}
+                />
+            )}
         </div>
     );
 };
