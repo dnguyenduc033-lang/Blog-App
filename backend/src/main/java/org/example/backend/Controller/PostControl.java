@@ -21,9 +21,10 @@ public class PostControl {
             @RequestParam("title") String title,
             @RequestParam("content") String content,
             @RequestParam("userName") String userName,
+            @RequestParam(value = "category", required = false) String category,
             @RequestParam(value = "files", required = false) MultipartFile[] files) {
 
-        return ResponseEntity.ok(postService.AddPost(title, content, userName, files));
+        return ResponseEntity.ok(postService.AddPost(title, content, userName, category,files));
     }
 
     @PutMapping(value = "/update/{id}", consumes = {"multipart/form-data"})
@@ -82,4 +83,3 @@ public class PostControl {
         return ResponseEntity.ok("Deleted successfully");
     }
 }
-
