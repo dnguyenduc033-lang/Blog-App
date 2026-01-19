@@ -1,9 +1,9 @@
 package org.example.backend.ServiceImplement;
 
 import org.example.backend.Model.Post;
-import org.example.backend.Model.Internote; // Thêm import Model để xử lý user
+import org.example.backend.Model.Internote;
 import org.example.backend.Repository.PostRepo;
-import org.example.backend.Repository.InternoteRepo; // Thêm import Repo để tìm userName
+import org.example.backend.Repository.InternoteRepo;
 import org.example.backend.Service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,12 +20,12 @@ public class PostServImpl implements PostService {
     private PostRepo repo;
 
     @Autowired
-    private InternoteRepo internoteRepo; 
+    private InternoteRepo internoteRepo;
 
     private final String UPLOAD_DIR = System.getProperty("user.dir") + File.separator + "uploads" + File.separator;
 
     @Override
-    public Post AddPost(String title, String content, String userName, MultipartFile[] files) {
+    public Post AddPost(String title, String content, String userName, String category, MultipartFile[] files) {
         List<String> fileNames = new ArrayList<>();
         saveFiles(files, fileNames);
 
@@ -33,6 +33,7 @@ public class PostServImpl implements PostService {
         post.setTitle(title);
         post.setContent(content);
         post.setUserName(userName);
+        post.setCategory(category);
         post.setAttachments(fileNames);
         post.setCreatedAt(LocalDateTime.now());
 
