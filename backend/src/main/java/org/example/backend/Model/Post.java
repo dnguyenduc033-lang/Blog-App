@@ -19,12 +19,15 @@ public class Post {
     @Column(name = "user_name")
     private String userName;
 
+    private String category;
+
     @ElementCollection
     @CollectionTable(name = "post_attachments", joinColumns = @JoinColumn(name = "post_id"))
     @Column(name = "file_path")
     private List<String> attachments;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
     @Column(name = "full_name")
     private String fullName;
@@ -32,6 +35,12 @@ public class Post {
     @Column(name = "email_address")
     private String emailAddress;
 
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    // --- GETTERS AND SETTERS ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -43,6 +52,9 @@ public class Post {
 
     public String getUserName() { return userName; }
     public void setUserName(String userName) { this.userName = userName; }
+
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 
     public List<String> getAttachments() { return attachments; }
     public void setAttachments(List<String> attachments) { this.attachments = attachments; }
@@ -56,4 +68,3 @@ public class Post {
     public String getEmailAddress() { return emailAddress; }
     public void setEmailAddress(String emailAddress) { this.emailAddress = emailAddress; }
 }
-
