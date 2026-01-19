@@ -5,6 +5,7 @@ const Navbar = ({ user, setUser }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    // Hiển thị thông báo xác nhận Yes/No
     const confirmLogout = window.confirm("Do you want to log out?");
     
     if (confirmLogout) {
