@@ -13,4 +13,3 @@ public interface InternoteRepo extends JpaRepository<Internote, Long> {
 
     boolean existsByEmailAddress(String email);
 }
-
