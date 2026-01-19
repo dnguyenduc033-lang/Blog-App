@@ -5,6 +5,7 @@ import axios from 'axios';
 const NewPost = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [category, setCategory] = useState('');
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [previews, setPreviews] = useState([]);
     const [isUploading, setIsUploading] = useState(false);
@@ -43,12 +44,15 @@ const NewPost = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
         setIsUploading(true);
 
         const formData = new FormData();
         formData.append('title', title);
         formData.append('content', content);
         formData.append('userName', userName); 
+        // Gửi category (có thể để trống)
+        formData.append('category', category);
         
         selectedFiles.forEach(file => {
             formData.append('files', file);
@@ -60,7 +64,7 @@ const NewPost = () => {
             });
 
             if (response.status === 200) {
-                alert("Đăng bài thành công với tên: " + userName);
+                alert("Create a successful post");
                 navigate('/'); 
             }
         } catch (error) {
@@ -79,21 +83,49 @@ const NewPost = () => {
                 </h2>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Title */}
                     <div>
                         <label className="block text-sm font-bold text-gray-700 mb-2 uppercase">Title</label>
                         <input
                             type="text" required value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none font-medium"
+                            placeholder="Enter post title..."
                         />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-bold text-gray-700 mb-2 uppercase">Category</label>
+                        <div className="relative">
+                            <select 
+                                value={category}
+                                onChange={(e) => setCategory(e.target.value)}
+                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none font-medium bg-white cursor-pointer appearance-none"
+                            >
+                                <option value="">--- No Category ---</option>
+                                <option value="TECHNOLOGY">TECHNOLOGY</option>
+                                <option value="EDUCATION">EDUCATION</option>
+                                <option value="CUISINE">CUISINE</option>
+                                <option value="ENTERTAINMENT">ENTERTAINMENT</option>
+                                <option value="JOB">JOB</option>
+                                <option value="TRAVEL">TRAVEL</option>
+                            </select>
+                            
+                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                                <svg className="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                                </svg>
+                            </div>
+                        </div>
                     </div>
 
                     <div>
                         <label className="block text-sm font-bold text-gray-700 mb-2 uppercase">Content</label>
                         <textarea
-                            required rows="10" value={content}
+                            required rows="8" value={content}
                             onChange={(e) => setContent(e.target.value)}
                             className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none mb-4"
+                            placeholder="Write your content here..."
                         />
 
                         <div className="bg-gray-50 p-5 rounded-xl border-2 border-dashed border-gray-200">
@@ -133,7 +165,11 @@ const NewPost = () => {
 
                     <div className="flex justify-end items-center gap-4 pt-6 border-t border-gray-100">
                         <button type="button" onClick={() => navigate('/')} className="px-6 py-2 text-gray-500 font-bold uppercase text-xs">Cancel</button>
-                        <button type="submit" disabled={isUploading} className="px-10 py-3 bg-blue-600 text-white font-black rounded-lg shadow-lg uppercase text-sm tracking-widest transition-all active:scale-95">
+                        <button 
+                            type="submit" 
+                            disabled={isUploading} 
+                            className="px-10 py-3 bg-blue-600 text-white font-black rounded-lg shadow-lg uppercase text-sm tracking-widest transition-all active:scale-95"
+                        >
                             {isUploading ? 'Uploading...' : 'Create'}
                         </button>
                     </div>
